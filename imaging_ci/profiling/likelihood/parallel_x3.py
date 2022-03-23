@@ -29,12 +29,12 @@ gives it a descriptive name. They define the folder the dataset is output to on 
  - The noise-map will be output to '/autocti_workspace/dataset/dataset_label/dataset_name/noise_map.fits'.
  - The pre_cti_data will be output to '/autocti_workspace/dataset/dataset_label/dataset_name/pre_cti_data.fits'.
 """
-total_rows = 2000
-shape_native = (total_rows, 2000)
+total_columns = 100
+shape_native = (total_columns, 2000)
 
 dataset_type = "imaging_ci"
 dataset_name = "parallel_x3"
-dataset_size = f"rows_{total_rows}"
+dataset_size = f"columns_{total_columns}"
 
 dataset_path = path.join("dataset", dataset_type, dataset_name, dataset_size)
 
@@ -61,7 +61,7 @@ The 2D shape of the image.
 """
 normalization = 100
 
-layout = ac.ci.Layout2DCI(
+layout = ac.Layout2DCI(
     shape_2d=shape_native,
     region_list=regions_list,
     parallel_overscan=parallel_overscan,
@@ -69,7 +69,7 @@ layout = ac.ci.Layout2DCI(
     serial_overscan=serial_overscan,
 )
 
-imaging = ac.ci.ImagingCI.from_fits(
+imaging = ac.ImagingCI.from_fits(
     image_path=path.join(dataset_path, f"image_0_100.fits"),
     noise_map_path=path.join(dataset_path, f"noise_map_0_100.fits"),
     pre_cti_data_path=path.join(dataset_path, f"pre_cti_data_0_100.fits"),
@@ -118,11 +118,12 @@ __Profile Settings__
 Settings which dictate the speed of arctic of clocking and therefore will change the profiling results.
 """
 parallel_express = 2
-parallel_roe = ac.ROEChargeInjection()
+parallel_roe = ac.ROE()
+# parallel_roe = ac.ROEChargeInjection()
 
 clocker = ac.Clocker2D(parallel_express=parallel_express, parallel_roe=parallel_roe)
 
-analysis = ac.AnalysisImagingCI(dataset_ci=imaging, clocker=clocker)
+analysis = ac.AnalysisImagingCI(dataset=imaging, clocker=clocker)
 
 repeats = 1
 
@@ -138,7 +139,7 @@ for i in range(repeats):
 
 time_normal = (time.time() - start) / repeats
 
-print(f"LH Evaluation Time Serial = {time_normal}")
+print(f"LH Evaluation Time Parallel = {time_normal}")
 
 """
 __Profile Fast__
@@ -146,10 +147,12 @@ __Profile Fast__
 The time to add CTI with the fast speed up.
 """
 clocker = ac.Clocker2D(
-    parallel_express=parallel_express, parallel_fast_pixels=(0, total_rows - 1)
+    parallel_express=parallel_express,
+    parallel_roe=parallel_roe,
+    # parallel_fast_pixels=(0, total_columns - 1)
 )
 
-analysis = ac.AnalysisImagingCI(dataset_ci=imaging, clocker=clocker)
+analysis = ac.AnalysisImagingCI(dataset=imaging, clocker=clocker)
 
 start = time.time()
 
@@ -159,7 +162,7 @@ for i in range(repeats):
 
 time_fast = (time.time() - start) / repeats
 
-print(f"LH Evaluation Time Serial = {time_fast}")
+print(f"LH Evaluation Time Parallel = {time_fast}")
 """
 Finished.
 """

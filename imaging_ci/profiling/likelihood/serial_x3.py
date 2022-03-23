@@ -61,7 +61,7 @@ The 2D shape of the image.
 """
 normalization = 100
 
-layout = ac.ci.Layout2DCI(
+layout = ac.Layout2DCI(
     shape_2d=shape_native,
     region_list=regions_list,
     parallel_overscan=parallel_overscan,
@@ -69,7 +69,7 @@ layout = ac.ci.Layout2DCI(
     serial_overscan=serial_overscan,
 )
 
-imaging = ac.ci.ImagingCI.from_fits(
+imaging = ac.ImagingCI.from_fits(
     image_path=path.join(dataset_path, f"image_0_100.fits"),
     noise_map_path=path.join(dataset_path, f"noise_map_0_100.fits"),
     pre_cti_data_path=path.join(dataset_path, f"pre_cti_data_0_100.fits"),
@@ -121,7 +121,7 @@ serial_express = 2
 
 clocker = ac.Clocker2D(serial_express=serial_express)
 
-analysis = ac.AnalysisImagingCI(dataset_ci=imaging, clocker=clocker)
+analysis = ac.AnalysisImagingCI(dataset=imaging, clocker=clocker)
 
 repeats = 1
 
@@ -148,7 +148,7 @@ clocker = ac.Clocker2D(
     serial_express=serial_express, serial_fast_pixels=(0, total_rows - 1)
 )
 
-analysis = ac.AnalysisImagingCI(dataset_ci=imaging, clocker=clocker)
+analysis = ac.AnalysisImagingCI(dataset=imaging, clocker=clocker)
 
 start = time.time()
 

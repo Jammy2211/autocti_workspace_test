@@ -76,7 +76,7 @@ normalization_list = [100, 5000, 25000, 200000]
 Create the layout of the charge injection pattern for every charge injection normalization.
 """
 # layout_list = [
-#     ac.ci.Layout2DCI(
+#     ac.Layout2DCI(
 #         shape_2d=shape_native,
 #         region_list=regions_list,
 #         normalization=normalization,
@@ -91,7 +91,7 @@ column_sigma_list = [100.0] * len(normalization_list)
 row_slope_list = [0.0] * len(normalization_list)
 
 layout_list = [
-    ac.ci.Layout2DCINonUniform(
+    ac.Layout2DCINonUniform(
         shape_2d=shape_native,
         region_list=regions_list,
         normalization=normalization,
@@ -137,7 +137,7 @@ via arCTIc and read-noise to the data.
 
 This creates instances of the `ImagingCI` class, which include the images, noise-maps and pre_cti_data images.
 """
-simulator = ac.ci.SimulatorImagingCI(read_noise=4.0, pixel_scales=0.1)
+simulator = ac.SimulatorImagingCI(read_noise=4.0, pixel_scales=0.1)
 
 """
 We also need to simulate the cosmic ray map, which we pass to the imaging simulator above. These cosmic rays will 
@@ -204,17 +204,13 @@ Output the image, noise-map and pre cti image of the charge injection dataset to
 """
 [
     imaging_ci.output_to_fits(
-        image_path=path.join(
-            dataset_path, f"image_{int(imaging_ci.layout.normalization)}.fits"
-        ),
-        noise_map_path=path.join(
-            dataset_path, f"noise_map_{int(imaging_ci.layout.normalization)}.fits"
-        ),
+        image_path=path.join(dataset_path, f"image_{int(normalization)}.fits"),
+        noise_map_path=path.join(dataset_path, f"noise_map_{int(normalization)}.fits"),
         pre_cti_data_path=path.join(
-            dataset_path, f"pre_cti_data_{int(imaging_ci.layout.normalization)}.fits"
+            dataset_path, f"pre_cti_data_{int(normalization)}.fits"
         ),
         cosmic_ray_map_path=path.join(
-            dataset_path, f"cosmic_ray_map_{int(imaging_ci.layout.normalization)}.fits"
+            dataset_path, f"cosmic_ray_map_{int(normalization)}.fits"
         ),
         overwrite=True,
     )

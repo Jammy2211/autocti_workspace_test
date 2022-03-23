@@ -68,7 +68,7 @@ normalization_list = [100, 5000, 25000, 200000]
 Create the layout of the charge injection pattern for every charge injection normalization.
 """
 layout_list = [
-    ac.ci.Layout2DCI(
+    ac.Layout2DCI(
         shape_2d=shape_native,
         region_list=regions_list,
         normalization=normalization,
@@ -83,7 +83,7 @@ layout_list = [
 We can now load every image, noise-map and pre-CTI charge injection image as instances of the `ImagingCI` object.
 """
 imaging_ci_list = [
-    ac.ci.ImagingCI.from_fits(
+    ac.ImagingCI.from_fits(
         image_path=path.join(dataset_path, f"image_{int(layout.normalization)}.fits"),
         noise_map_path=path.join(
             dataset_path, f"noise_map_{int(layout.normalization)}.fits"
@@ -117,7 +117,7 @@ for imaging_ci in imaging_ci_list:
     )
 
     figsize = (50, 40)
-    norm = colors.Normalize(vmin=0.0, vmax=imaging_ci.layout.normalization)
+    norm = colors.Normalize(vmin=0.0, vmax=normalization)
 
     plt.figure(figsize=figsize)
     plt.imshow(imaging_ci.data.native, norm=norm)
@@ -157,7 +157,7 @@ for imaging_ci in imaging_ci_list:
         imaging_ci.absolute_signal_to_noise_map.native[cr_unflagged_map == True]
     )
 
-    print(f"NORMALIZATION {imaging_ci.layout.normalization}\n")
+    print(f"NORMALIZATION {normalization}\n")
 
     print(f"CR True  = {total_cr_true}")
     print(f"CR Flagged = {total_cr_flagged}")

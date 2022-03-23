@@ -91,10 +91,9 @@ for total_columns in total_columns_list:
     Create the layout of the charge injection pattern for every charge injection normalization.
     """
     layout_list = [
-        ac.ci.Layout2DCI(
+        ac.Layout2DCI(
             shape_2d=shape_native,
             region_list=regions_list,
-            normalization=normalization,
             parallel_overscan=parallel_overscan,
             serial_prescan=serial_prescan,
             serial_overscan=serial_overscan,
@@ -137,7 +136,12 @@ for total_columns in total_columns_list:
     
     This creates instances of the `ImagingCI` class, which include the images, noise-maps and pre_cti_data images.
     """
-    simulator = ac.ci.SimulatorImagingCI(read_noise=4.0, pixel_scales=0.1)
+    simulator_list = [
+        ac.SimulatorImagingCI(
+            read_noise=4.0, pixel_scales=0.1, normalization=normalization
+        )
+        for normalization in normalization_list
+    ]
 
     """
     We now pass each charge injection pattern to the simulator. This generate the charge injection image of each exposure
@@ -154,7 +158,7 @@ for total_columns in total_columns_list:
             parallel_trap_list=parallel_trap_list,
             parallel_ccd=parallel_ccd,
         )
-        for layout_ci in layout_list
+        for layout_ci, simulator in zip(layout_list, simulator_list)
     ]
 
     """
@@ -174,21 +178,16 @@ for total_columns in total_columns_list:
     """
     [
         imaging_ci.output_to_fits(
-            image_path=path.join(
-                dataset_path,
-                f"image_{index}_{int(imaging_ci.layout.normalization)}.fits",
-            ),
+            image_path=path.join(dataset_path, f"image_{int(normalization)}.fits"),
             noise_map_path=path.join(
-                dataset_path,
-                f"noise_map_{index}_{int(imaging_ci.layout.normalization)}.fits",
+                dataset_path, f"noise_map_{int(normalization)}.fits"
             ),
             pre_cti_data_path=path.join(
-                dataset_path,
-                f"pre_cti_data_{index}_{int(imaging_ci.layout.normalization)}.fits",
+                dataset_path, f"pre_cti_data_{int(normalization)}.fits"
             ),
             overwrite=True,
         )
-        for (index, imaging_ci) in enumerate(imaging_ci_list)
+        for imaging_ci, normalization in zip(imaging_ci_list, normalization_list)
     ]
 
 """
