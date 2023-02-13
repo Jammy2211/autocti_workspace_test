@@ -177,9 +177,11 @@ for time in time_list:
 
     model = af.Collection(
         cti=af.Model(
-            ac.CTI2D, parallel_trap_list=[parallel_trap_0], parallel_ccd=parallel_ccd,
+            ac.CTI2D,
+            parallel_trap_list=[parallel_trap_0],
+            parallel_ccd=parallel_ccd,
         ),
-        time=time
+        time=time,
     )
 
     """
@@ -221,4 +223,4 @@ for time in time_list:
 interpolator = af.LinearInterpolator(instances=instance_list)
 instance = interpolator[interpolator.time == 1.5]
 
-# print(instance.cti.parallel_trap_list)
+print(instance.cti.parallel_trap_list[0].density)

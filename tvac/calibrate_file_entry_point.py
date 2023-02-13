@@ -178,7 +178,9 @@ injection_std_list = layout_ci.extract.parallel_fpr.std_list_from(
 )
 
 noise_map = layout_ci.noise_map_non_uniform_from(
-    injection_std_list=injection_std_list, pixel_scales=data.pixel_scales, read_noise=4.0
+    injection_std_list=injection_std_list,
+    pixel_scales=data.pixel_scales,
+    read_noise=4.0,
 )
 
 
@@ -242,6 +244,12 @@ array_2d_plotter.figure_2d()
 
 
 data.output_to_fits(file_path=path.join(dataset_path, "data.fits"), overwrite=True)
-noise_map.output_to_fits(file_path=path.join(dataset_path, "noise_map.fits"), overwrite=True)
-pre_cti_data.output_to_fits(file_path=path.join(dataset_path, "pre_cti_data.fits"), overwrite=True)
-cosmic_ray_map.output_to_fits(file_path=path.join(dataset_path, "cosmic_ray_map.fits"), overwrite=True)
+noise_map.output_to_fits(
+    file_path=path.join(dataset_path, "noise_map.fits"), overwrite=True
+)
+pre_cti_data.output_to_fits(
+    file_path=path.join(dataset_path, "pre_cti_data.fits"), overwrite=True
+)
+cosmic_ray_map.output_to_fits(
+    file_path=path.join(dataset_path, "cosmic_ray_map.fits"), overwrite=True
+)

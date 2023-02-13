@@ -223,9 +223,7 @@ cosmic_ray_parallel_buffer = 5
 
 cosmic_ray_mask = ac.Mask2D.from_cosmic_ray_map_buffed(
     cosmic_ray_map=cosmic_ray_mask,
-    settings=ac.SettingsMask2D(
-        cosmic_ray_parallel_buffer=cosmic_ray_parallel_buffer
-    ),
+    settings=ac.SettingsMask2D(cosmic_ray_parallel_buffer=cosmic_ray_parallel_buffer),
 )
 
 """

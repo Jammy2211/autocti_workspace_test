@@ -124,7 +124,7 @@ The density of the trap species for each dataset is computed via a linear relati
 density_evolution = 0.05
 density_start = 0.01
 
-time_list = range(0, 10)
+time_list = range(0, 2)
 
 for time in time_list:
 
@@ -204,7 +204,8 @@ for time in time_list:
     """
     for imaging_ci, norm in zip(imaging_ci_list, norm_list):
         output = aplt.Output(
-            path=path.join(dataset_output_path, f"norm_{int(norm)}", "binned_1d"), format="png"
+            path=path.join(dataset_output_path, f"norm_{int(norm)}", "binned_1d"),
+            format="png",
         )
 
         mat_plot_1d = aplt.MatPlot1D(output=output)

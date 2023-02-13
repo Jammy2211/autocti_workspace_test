@@ -70,4 +70,4 @@ max_lh_instance_list = [samps.max_log_likelihood() for samps in agg.values("samp
 interpolator = af.LinearInterpolator(instances=max_lh_instance_list)
 instance = interpolator[interpolator.time == 1.5]
 
-# print(instance.cti.parallel_trap_list)
+print(instance.cti.parallel_trap_list[0].density)
