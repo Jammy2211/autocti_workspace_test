@@ -53,21 +53,13 @@ from autofit.aggregator.aggregator import Aggregator
 
 agg = Aggregator(directory=path.join("output", "temporal"))
 
-# database_file = "database_directory_general.sqlite"
-
-# try:
-#     os.remove(path.join("output", database_file))
-# except FileNotFoundError:
-#     pass
-
-# agg = Aggregator.from_database(path.join(database_file))
-# agg.add_directory(
-#     directory=path.join("output", "database", "directory", dataset_name, "general")
-# )
-
 max_lh_instance_list = [samps.max_log_likelihood() for samps in agg.values("samples")]
 
 interpolator = af.LinearInterpolator(instances=max_lh_instance_list)
 instance = interpolator[interpolator.time == 1.5]
 
 print(instance.cti.parallel_trap_list[0].density)
+
+json_file = path.join(dataset_path, "interpolator.json")
+
+interpolator.output_to_json(file_path=json_file)
