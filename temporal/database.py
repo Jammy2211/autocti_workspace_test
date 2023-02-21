@@ -60,6 +60,13 @@ instance = interpolator[interpolator.time == 1.5]
 
 print(instance.cti.parallel_trap_list[0].density)
 
+"""
+__Serialization__
+
+Make sure that interpolator + model can be serialized to a .json file.
+"""
 json_file = path.join(dataset_path, "interpolator.json")
 
 interpolator.output_to_json(file_path=json_file)
+
+interpolator = af.LinearInterpolator.from_json(file_path=json_file)
